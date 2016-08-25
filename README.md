@@ -13,10 +13,13 @@ Quickstart guide:
 
 - When you're done with a scene, just press left or right to move on to the next or previous scene in the dataset. You can move backwards or forwards through the data as you wish, and any changes you make will persist, though the label pallette does not persist across scenes.
 
-KEYBOARD SHORTCUTS:
+# KEYBOARD SHORTCUTS:
 
 - ctrl+z - infinite undo
-
 - h - hides all drawing on the image
 - j - renders all drawing on the image at 50% opacity
 - k - cycles the size of the brush
+
+# Troubleshooting
+
+lwAnn stores its data in the same directories as the image files. So if something seems to have broken, try deleting the lwann_data.dat files in the directories of any entries that may be giving you trouble.
