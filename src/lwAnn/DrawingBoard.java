@@ -4,10 +4,12 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -39,6 +41,7 @@ import java.util.List;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -52,11 +55,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -80,11 +87,13 @@ public class DrawingBoard extends JFrame implements KeyListener {
 		    this.addKeyListener(this);
 		    this.setFocusable(true);
 		    this.setFocusTraversalKeysEnabled(false);
+		    this.setResizable(false);
 		   // curSceneData = new SceneDataModel();
 		    
 		    JMenuBar menuBar = new JMenuBar();
 		    JMenu fileMenu = new JMenu("File");
 		    JMenuItem loadButton = new JMenuItem("Load Directory");
+		    JMenuItem gotoButton = new JMenuItem("Goto Scene");
 		    
 		    loadButton.addActionListener(new ActionListener() {
 				
@@ -110,12 +119,56 @@ public class DrawingBoard extends JFrame implements KeyListener {
 				}
 			});
 		    
+		    gotoButton.addActionListener(new ActionListener() {
+				
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							String response = JOptionPane.showInputDialog(null,
+									 "Enter a scene to jump to",
+									 "",
+									 JOptionPane.QUESTION_MESSAGE);
+							       int val = Integer.valueOf(response);
+							       System.out.println("VAL:" + val);
+							       if(val < files.size()) {
+							    	   System.out.println("Valid!");
+							    	   cur_file_idx = val;
+								       paintSurface.attachImage(files.get(cur_file_idx));
+								       
+								       curSceneData = loadSavedData(files.get(cur_file_idx));
+	
+							    	   labelTools.loadSceneData(curSceneData);
+							    	   saveDataModel();
+							       }
+							    
+						}
+					});
+		    
+
 		    fileMenu.add(loadButton);
+		    fileMenu.add(gotoButton);
 		    menuBar.add(fileMenu);
 		    
 		    this.setJMenuBar(menuBar);
 	
 			}
+	  
+	  public void cycleBrushSizes() {
+		  if(BRUSH_SIZE == 24) {
+			  BRUSH_SIZE = 48;
+			  return;
+		  }
+		  if(BRUSH_SIZE == 48) {
+			  BRUSH_SIZE = 12;
+			  return;
+		  }
+		  if(BRUSH_SIZE == 12) {
+			  BRUSH_SIZE = 24;
+			  return;
+		  }
+		  
+		  
+		  
+	  }
 	  
 	  public void saveDataModel() {
 	 
@@ -194,6 +247,29 @@ public class DrawingBoard extends JFrame implements KeyListener {
 			  this.addKeyListener(db);
 			  board = db;
 			   this.setFocusable(true);
+			   
+			   
+			   JSlider brushsize = new JSlider(JSlider.HORIZONTAL,12, 64, 24);
+			   brushsize.setMajorTickSpacing(10);
+			   brushsize.setMinorTickSpacing(1);
+			   brushsize.setPaintTicks(true);
+		        brushsize.setPaintLabels(true);
+		        brushsize.addKeyListener(db);
+		        
+		        brushsize.addChangeListener(new ChangeListener() {
+					
+					@Override
+					public void stateChanged(ChangeEvent e) {
+						 JSlider source = (JSlider)e.getSource();
+						    if (!source.getValueIsAdjusting()) {
+						        int val = (int)source.getValue();
+						        board.BRUSH_SIZE = val;
+						    }
+						
+					}
+				});
+			   
+			   
 			  list = new JList(listModel);
 			  MouseListener mouseListener = new MouseAdapter() {
 				    public void mouseClicked(MouseEvent e) {
@@ -270,11 +346,19 @@ public class DrawingBoard extends JFrame implements KeyListener {
 			  
 			  
 			  
-			  this.setLayout(new GridLayout(4,1));
+			 // this.setLayout(new GridLayout(5,1));
+			  this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			 add.setAlignmentX(Component.CENTER_ALIGNMENT);
+			 del.setAlignmentX(Component.CENTER_ALIGNMENT);
 			  this.add(scrollPane);
 			  this.add(add);
 			  this.add(del);
 			  
+			  
+			  JLabel sliderLabel = new JLabel("Brush Size", JLabel.CENTER);
+		      sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			  this.add(sliderLabel);
+			  this.add(brushsize);
 			  
 			  
 			  
@@ -527,6 +611,9 @@ public class DrawingBoard extends JFrame implements KeyListener {
 		        }
 		        }
 		        
+		        
+		        g2.setColor(Color.WHITE);
+		        g2.drawString("Scene # " + (board.cur_file_idx) +" of " + (board.files.size()), 16, 16);
 			    g2.dispose();
 		        
 		    }
@@ -563,6 +650,11 @@ public class DrawingBoard extends JFrame implements KeyListener {
         	  paintSurface.hide_labels = false;
         	  paintSurface.fade_labels = !paintSurface.fade_labels ;
         	  key_down = true;
+        	  repaint();
+        	  return;
+          }
+          if (evt.getKeyCode() == KeyEvent.VK_K) {
+        	  cycleBrushSizes();
         	  repaint();
         	  return;
           }
