@@ -108,6 +108,10 @@ public class DrawingBoard extends JFrame implements KeyListener {
 					       System.out.println("Opening: " +
 					            chooser.getSelectedFile().getAbsolutePath());
 					       files = scanDirectory(chooser.getSelectedFile().getAbsolutePath());
+					       if(files.isEmpty()) {
+					    	   System.out.println("NO FILES IN DIRECTORY");
+					    	   return;
+					       }
 					       cur_file_idx = 0;
 					       paintSurface.attachImage(files.get(cur_file_idx));
 					       
@@ -221,7 +225,7 @@ public class DrawingBoard extends JFrame implements KeyListener {
 	        
 	        for (File file : fList) {
 	            if (file.isFile()) {
-	                if(file.getName().contains("jpg")) {
+	                if(file.getName().contains("jpg") || file.getName().contains("jpeg")) {
 
 		               // System.out.println(file.getAbsolutePath());
 	                	resultList.add(file);
