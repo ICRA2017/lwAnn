@@ -11,8 +11,6 @@ Quickstart guide:
 
 - To alter the size of the brush, use the slider in the bottom right.
 
-- You can alter the brush size from the drop-down menu, to make big or small jobs easier.
-
 - When you're done with a scene, just press left or right to move on to the next or previous scene in the dataset. You can move backwards or forwards through the data as you wish, and any changes you make will persist, though the label pallette does not persist across scenes.
 
 - Use the File->Goto Scene function to go to a specific scene.
