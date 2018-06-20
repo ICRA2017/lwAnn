@@ -1,6 +1,6 @@
 # lwAnn: lightweight Annotation
 
-[![Docker Build Status](https://img.shields.io/docker/build/icra2017/lwAnn.svg)](https://hub.docker.com/r/icra2017/lwAnn/)
+[![Docker Build Status](https://img.shields.io/docker/build/icra2017/lwann.svg)](https://hub.docker.com/r/icra2017/lwann/)
 
 lwAnn is a basic image annotation tool intended to make it easy and quick to annotate scenes. Aside from the usual stuff you might expect, the main feature is data persistence, which means everything you do is saved as you do it. You can close the program, re-open it later, move back and forth between scenes in the dataset, all without having to worry about saving anything.
 
