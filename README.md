@@ -26,3 +26,9 @@ Quickstart guide:
 # Troubleshooting
 
 lwAnn stores its data in the same directories as the image files. So if something seems to have broken, try deleting the lwann_data.dat files in the directories of any entries that may be giving you trouble.
+
+# Run in Docker
+Activate the X-server in your host machine, and run the command:
+```
+$ docker run -it --rm -e DISPLAY=<host_ip_address>:0.0 -v /tmp/.X11-unix:/tmp/.X11-unix:rw icra2017/lwAnn
+```
