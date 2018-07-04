@@ -28,7 +28,14 @@ Quickstart guide:
 lwAnn stores its data in the same directories as the image files. So if something seems to have broken, try deleting the lwann_data.dat files in the directories of any entries that may be giving you trouble.
 
 # Run in Docker
-Activate the X-server in your host machine, and run the command:
+
+An X-server must be running in the host system, and permission for connections must be granted. 
+For more secure configurations, see [this tutorial](http://wiki.ros.org/docker/Tutorials/GUI#Using_X_server).
+
 ```
-$ docker run -it --rm -e DISPLAY=<host_ip_address>:0.0 -v /tmp/.X11-unix:/tmp/.X11-unix:rw icra2017/lwAnn
+$ docker run -it --rm --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" \
+--volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+icra2017/lwann
 ```
+
+TODO: download dataset
